@@ -1,0 +1,71 @@
+{
+  "name": "localDest-test",
+  "version": "1.0.0",
+  "description": "A simple CAP project.",
+  "repository": "<Add your repository here>",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@sap-cloud-sdk/http-client": "^2.12.1",
+    "@sap/cds": "^6",
+    "@sap/xsenv": "^3.4.0",
+    "@sap/xssec": "^3.2.14",
+    "express": "^4",
+    "passport": "^0.6.0",
+    "hdb": "^0.19.0"
+  },
+  "devDependencies": {
+    "sqlite3": "^5.0.4"
+  },
+  "scripts": {
+    "start": "cds run",
+    "deploy": "npm i && mbt build && cf deploy mta_archives/localDest-test_1.0.0.mtar --retries 1",
+    "undeploy": "cf undeploy localDest-test --delete-services --delete-service-keys --delete-service-brokers -f"
+  },
+  "engines": {
+    "node": "^16.15"
+  },
+  "eslintConfig": {
+    "extends": "eslint:recommended",
+    "env": {
+      "es2020": true,
+      "node": true,
+      "jest": true,
+      "mocha": true
+    },
+    "globals": {
+      "SELECT": true,
+      "INSERT": true,
+      "UPDATE": true,
+      "DELETE": true,
+      "CREATE": true,
+      "DROP": true,
+      "CDL": true,
+      "CQL": true,
+      "CXL": true,
+      "cds": true
+    },
+    "rules": {
+      "no-console": "off",
+      "require-atomic-updates": "off"
+    }
+  },
+  "cds": {
+    "requires": {
+      "notes": {
+        "kind": "odata",
+        "model": "srv/external/notes",
+        "credentials": {
+          "destination": "notes-srv",
+          "path": "/api"
+        }
+      },
+      "auth": {
+        "kind": "xsuaa"
+      },
+      "db": {
+        "kind": "hana-cloud"
+      }
+    }
+  }
+}

@@ -1,0 +1,53 @@
+<edmx:Edmx xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx" Version="4.0">
+<edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Capabilities.V1.xml">
+<edmx:Include Alias="Capabilities" Namespace="Org.OData.Capabilities.V1"/>
+</edmx:Reference>
+<edmx:DataServices>
+<Schema xmlns="http://docs.oasis-open.org/odata/ns/edm" Namespace="api">
+<EntityContainer Name="EntityContainer">
+<EntitySet Name="Notes" EntityType="api.Notes">
+<NavigationPropertyBinding Path="type" Target="Type"/>
+</EntitySet>
+<EntitySet Name="Type" EntityType="api.Type"/>
+</EntityContainer>
+<EntityType Name="Notes">
+<Key>
+<PropertyRef Name="ID"/>
+</Key>
+<Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+<Property Name="title" Type="Edm.String" MaxLength="100"/>
+<Property Name="date" Type="Edm.Date"/>
+<Property Name="text" Type="Edm.String"/>
+<Property Name="completed" Type="Edm.Boolean"/>
+<NavigationProperty Name="type" Type="api.Type">
+<ReferentialConstraint Property="type_ID" ReferencedProperty="ID"/>
+</NavigationProperty>
+<Property Name="type_ID" Type="Edm.Int32"/>
+</EntityType>
+<EntityType Name="Type">
+<Key>
+<PropertyRef Name="ID"/>
+</Key>
+<Property Name="ID" Type="Edm.Int32" Nullable="false"/>
+<Property Name="type" Type="Edm.String" MaxLength="15"/>
+</EntityType>
+<Annotations Target="api.EntityContainer/Type">
+<Annotation Term="Capabilities.DeleteRestrictions">
+<Record Type="Capabilities.DeleteRestrictionsType">
+<PropertyValue Property="Deletable" Bool="false"/>
+</Record>
+</Annotation>
+<Annotation Term="Capabilities.InsertRestrictions">
+<Record Type="Capabilities.InsertRestrictionsType">
+<PropertyValue Property="Insertable" Bool="false"/>
+</Record>
+</Annotation>
+<Annotation Term="Capabilities.UpdateRestrictions">
+<Record Type="Capabilities.UpdateRestrictionsType">
+<PropertyValue Property="Updatable" Bool="false"/>
+</Record>
+</Annotation>
+</Annotations>
+</Schema>
+</edmx:DataServices>
+</edmx:Edmx>

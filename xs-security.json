@@ -1,0 +1,7 @@
+{
+  "xsappname": "localDest-test-xsuaa",
+  "tenant-mode": "dedicated",
+  "scopes": [],
+  "attributes": [],
+  "role-templates": []
+}

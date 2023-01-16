@@ -1,0 +1,96 @@
+{
+  "meta": {
+    "creator": "cds-dk 6.3.1"
+  },
+  "$version": "2.0",
+  "definitions": {
+    "notes.Notes": {
+      "kind": "entity",
+      "@cds.external": true,
+      "@cds.persistence.skip": true,
+      "elements": {
+        "ID": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.UUID"
+        },
+        "title": {
+          "notNull": false,
+          "type": "cds.String",
+          "length": 100
+        },
+        "date": {
+          "notNull": false,
+          "type": "cds.Date"
+        },
+        "text": {
+          "notNull": false,
+          "type": "cds.LargeString"
+        },
+        "completed": {
+          "notNull": false,
+          "type": "cds.Boolean"
+        },
+        "type": {
+          "type": "cds.Association",
+          "@cds.ambiguous": "missing on condition?",
+          "target": "notes.Type",
+          "cardinality": {
+            "max": 1
+          },
+          "on": [
+            {
+              "ref": [
+                "type",
+                "ID"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "type_ID"
+              ]
+            }
+          ]
+        },
+        "type_ID": {
+          "notNull": false,
+          "type": "cds.Integer"
+        }
+      }
+    },
+    "notes.Type": {
+      "kind": "entity",
+      "@cds.external": true,
+      "@cds.persistence.skip": true,
+      "elements": {
+        "ID": {
+          "key": true,
+          "notNull": true,
+          "type": "cds.Integer"
+        },
+        "type": {
+          "notNull": false,
+          "type": "cds.String",
+          "length": 15
+        }
+      },
+      "@Capabilities.DeleteRestrictions": {
+        "$Type": "Capabilities.DeleteRestrictionsType",
+        "Deletable": false
+      },
+      "@Capabilities.InsertRestrictions": {
+        "$Type": "Capabilities.InsertRestrictionsType",
+        "Insertable": false
+      },
+      "@Capabilities.UpdateRestrictions": {
+        "$Type": "Capabilities.UpdateRestrictionsType",
+        "Updatable": false
+      }
+    },
+    "notes": {
+      "kind": "service",
+      "@cds.external": true
+    }
+  }
+}
