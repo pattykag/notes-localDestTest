@@ -22,11 +22,11 @@ modules:
         properties:
           srv-url: ${default-url}
     requires:
+      - name: db
       - name: xsuaa
       - name: destination
       - name: connectivity
       - name: logs
-      - name: db
 
   - name: localDest-test-db-deployer
     type: hdb
@@ -35,17 +35,27 @@ modules:
       buildpack: nodejs_buildpack
     requires:
       - name: db
+      - name: logs
 
 resources:
+  - name: db
+    type: com.sap.xs.hdi-container
+    parameters:
+      service-name: localDest-test-db
+      service-keys:
+        - name: localDest-test-db-key
+      service: hana
+      service-plan: hdi-shared
+
   - name: xsuaa
     type: org.cloudfoundry.managed-service
     parameters:
-      service-name: localDest-test-xsuaa
       service: xsuaa
-      service-plan: application
-      path: ./xs-security.json
+      service-name: localDest-test-xsuaa
       service-keys:
         - name: localDest-test-xsuaa-key
+      service-plan: application
+      path: ./xs-security.json
       config:
         xsappname: localDest-test-${org}-${space}
         tenant-mode: dedicated
@@ -53,7 +63,9 @@ resources:
   - name: destination
     type: org.cloudfoundry.managed-service
     parameters:
-      service-name: localDest-test-dest
+      service-name: localDest-test2-dest
+      service-keys:
+        - name: localDest-test2-dest-key
       service: destination
       service-plan: lite
 
@@ -61,6 +73,8 @@ resources:
     type: org.cloudfoundry.managed-service
     parameters:
       service-name: localDest-test-connectivity
+      service-keys:
+        - name: localDest-test-connectivity-key
       service: connectivity
       service-plan: lite
 
@@ -70,34 +84,3 @@ resources:
       service-name: localDest-test-logs
       service: application-logs
       service-plan: lite
-
-  - name: localDest-test-dest
-    type: destination
-    requires:
-      - name: srv-api
-    parameters:
-      service-keys:
-        - name: localDest-test-dest-key
-      config:
-        init_data:
-          subaccount:
-            existing_destinations_policy: update
-            existing_certificates_policy: update
-            destinations:
-              - Name: localdelete-dest
-                URL: ~{srv-api/srv-url}
-                Type: HTTP
-                ProxyType: Internet
-                Authentication: NoAuthentication
-                HTML5Runtime_enabled: "true"
-                HTML5.ForwardAuthToken: "true"
-                HTML5.DynamicDestination: "true"
-
-  - name: db
-    type: com.sap.xs.hdi-container
-    parameters:
-      service-name: localDest-test-db
-      service: hana
-      service-plan: hdi-shared
-      service-keys:
-        - name: localDest-test-db-key
